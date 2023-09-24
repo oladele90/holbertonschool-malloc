@@ -10,7 +10,7 @@ size_t chunker(size_t size)
         
 }
 
-void *naive_malloc(size_t size)
+void *_malloc(size_t size)
 {
     
     static void *start_brk;
