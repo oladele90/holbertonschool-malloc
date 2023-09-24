@@ -6,7 +6,7 @@ size_t chunker(size_t size)
 {
     for (; size % 8 != 0; size++)
         ;
-    return (size);
+    return (size + sizeof(size_t));
         
 }
 
@@ -18,17 +18,17 @@ void *_malloc(size_t size)
     size_t pagesize = sysconf(_SC_PAGESIZE);
     static size_t page;
 
+    size = chunker(size);
     if (!start_brk)
         start_brk = sbrk(0);
-    while (page < size + sizeof(size_t))
+    while (page < size)
     {
         page += pagesize;
         sbrk(pagesize);
     }
-    size = chunker(size);
-    *((size_t *)start_brk) = size + sizeof(size_t);
-    new_brk = (char *)start_brk + sizeof(size_t);
-    start_brk = (char *) start_brk + size + sizeof(size_t);
-    page -= (size + sizeof(size_t));
+    *((size_t *)start_brk) = size;
+    new_brk = size;
+    start_brk = (char *) start_brk + size;
+    page -= (size);
     return(new_brk);
 }
