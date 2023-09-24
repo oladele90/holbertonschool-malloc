@@ -20,7 +20,7 @@ void *_malloc(size_t size)
 
     if (!start_brk)
         start_brk = sbrk(0);
-    while (page < size)
+    while (page < size + sizeof(size_t))
     {
         page += pagesize;
         sbrk(pagesize);
