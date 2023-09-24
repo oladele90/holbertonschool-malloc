@@ -12,12 +12,23 @@ size_t chunker(size_t size)
 
 void *naive_malloc(size_t size)
 {
-    void *start_brk = sbrk(0), *new_brk;
+    
+    static void *start_brk;
+    void * new_brk;
+    size_t pagesize = sysconf(_SC_PAGESIZE);
+    static size_t page;
 
+    if (!start_brk)
+        start_brk = sbrk(0);
+    while (page < size)
+    {
+        page += pagesize;
+        sbrk(pagesize);
+    }
     size = chunker(size);
-    sbrk(size + sizeof(size_t));
-    new_brk = sbrk(0);
     *((size_t *)start_brk) = size + sizeof(size_t);
-    start_brk = (char *)new_brk - size;
-    return(start_brk);
+    new_brk = (char *)start_brk + sizeof(size_t);
+    start_brk = (char *) start_brk + size + sizeof(size_t);
+    page -= (size + sizeof(size_t));
+    return(new_brk);
 }
