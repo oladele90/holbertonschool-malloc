@@ -14,6 +14,7 @@ void *naive_malloc(size_t size)
 {
     void *start_brk = sbrk(0), *new_brk;
 
+    sbrk(_SC_PAGESIZE);
     size = chunker(size);
     sbrk(size + sizeof(size_t));
     new_brk = sbrk(0);
