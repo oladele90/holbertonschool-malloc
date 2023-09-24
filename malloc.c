@@ -27,7 +27,7 @@ void *_malloc(size_t size)
         sbrk(pagesize);
     }
     *((size_t *)start_brk) = size;
-    new_brk = (char *)size;
+    new_brk = (char *)start_brk + sizeof(size_t);
     start_brk = (char *) start_brk + size;
     page -= (size);
     return(new_brk);
