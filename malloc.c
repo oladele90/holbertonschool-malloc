@@ -33,7 +33,7 @@ void *_malloc(size_t size)
 		}
     }
         
-    while (page < size)
+    while (page < size + sizeof(Chunk_t))
     {
         page += pagesize;
         sbrk(pagesize);
