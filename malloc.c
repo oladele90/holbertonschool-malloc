@@ -25,7 +25,7 @@ void *_malloc(size_t size)
         for (i = 0; i < chunks_available; i++)
 		{
 			heap_start = ((Chunk_t *)chunk_arr[i] - 1);
-			if (heap_start->status == 0 && heap_start->ChunkSize >= size)
+			if (!heap_start->status && heap_start->ChunkSize >= size)
 			{
 				heap_start->status = size;
 				return (chunk_arr[i]);
