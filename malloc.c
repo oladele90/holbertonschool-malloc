@@ -11,7 +11,7 @@ size_t chunker(size_t size)
 void *_malloc(size_t size)
 {
     Chunk_t *heap_start;
-    static void *start_brk, *chunk_arr[4096];
+    static void *start_brk, *chunk_arr[10000];
     void * new_brk;
     size_t pagesize = sysconf(_SC_PAGESIZE);
     static size_t page, chunks_available;
