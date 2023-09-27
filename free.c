@@ -9,7 +9,7 @@ void _free(void *ptr)
 
 	if (ptr)
 	{
-		header = ((struct headers*)ptr) - 1;
-		header->my_size = 0;
+		header = ((Chunk_t*)ptr) - 1;
+		header->status = 0;
 	}
 }

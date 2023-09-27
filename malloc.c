@@ -1,6 +1,4 @@
-#include "stdio.h"
-#include "stdlib.h"
-#include "unistd.h"
+#include "malloc.h"
 
 size_t chunker(size_t size)
 {
@@ -17,19 +15,20 @@ void *_malloc(size_t size)
     void * new_brk;
     size_t pagesize = sysconf(_SC_PAGESIZE);
     static size_t page, chunks_available;
+    size_t i;
 
     size = chunker(size);
     if (!start_brk)
         start_brk = sbrk(0);
     if (chunks_available)
     {
-        for (i = 0; i < chunk_available; i++)
+        for (i = 0; i < chunks_available; i++)
 		{
-			heap_start = ((Chunk_t *)chunks[i]) - 1;
+			heap_start = ((Chunk_t *)chunk_arr[i] - 1);
 			if (heap_start->status == 0 && heap_start->ChunkSize >= size)
 			{
 				heap_start->status = size;
-				return (chunks[i]);
+				return (chunk_arr[i]);
 			}
 		}
     }
@@ -39,15 +38,15 @@ void *_malloc(size_t size)
         page += pagesize;
         sbrk(pagesize);
     }
-    chunk_available++;
+    chunks_available++;
     new_brk = start_brk;
     start_brk = (char *) start_brk + size + sizeof(Chunk_t);
     heap_start = (Chunk_t *)new_brk;
     heap_start->status = size;
     heap_start->ChunkSize = size + sizeof(Chunk_t);
     *((size_t *)start_brk) = size;
-    chunk_arr[chunk_available - 1] = new_brk;
+    new_brk = (char *)new_brk + sizeof(Chunk_t);
+    chunk_arr[chunks_available] = new_brk;
     page -= (size + sizeof(Chunk_t));
     return(new_brk);
 }
-
