@@ -4,7 +4,7 @@ size_t chunker(size_t size)
 {
     for (; size % 8 != 0; size++)
         ;
-    return (size + sizeof(size_t));
+    return (size);
         
 }
 
@@ -44,9 +44,9 @@ void *_malloc(size_t size)
     heap_start = (Chunk_t *)new_brk;
     heap_start->status = size;
     heap_start->ChunkSize = size + sizeof(Chunk_t);
-    *((size_t *)start_brk) = size;
+    *((size_t *)new_brk) = size;
     new_brk = (char *)new_brk + sizeof(Chunk_t);
-    chunk_arr[chunks_available] = new_brk;
+    chunk_arr[chunks_available - 1] = new_brk;
     page -= (size + sizeof(Chunk_t));
     return(new_brk);
 }
